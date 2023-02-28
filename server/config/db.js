@@ -4,7 +4,7 @@ const db = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "",
-  database: "blog_posts",
+  database: "sagittarius-social-db",
 });
 
 db.connect(function (err) {
