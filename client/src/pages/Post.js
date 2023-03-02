@@ -13,7 +13,7 @@ export default function Post() {
   const [post, setPost] = useState({
     title: "",
     postText: "",
-    userName: "",
+    user_Login: "",
     photoNames: [],
     id: "",
     rendered: 0,
@@ -36,7 +36,7 @@ export default function Post() {
         setPost({
           title: data.data[0].title,
           postText: data.data[0].post_text,
-          userName: data.data[0].user_name,
+          user_Login: data.data[0].user_name,
           photoNames: joined,
           id: data.data[0].id,
           rendered: 1,
@@ -65,14 +65,14 @@ export default function Post() {
 
   return (
     <div className="flex justify-center m-12 f h-4/5">
-      <div className="flex flex-col w-3/5 p-12 mt-12 rounded-md shadow-2xl h-fit flex-nowrap">
+      <div className="flex flex-col w-3/5 p-8 mt-12 rounded-md shadow-2xl h-fit flex-nowrap">
         <div className="about">
           <h1 className="mb-1 text-2xl font-bold text-gray-800 post-title">
             {post.title}
           </h1>
           <p>{post.postText}</p>
           <h4 className="m-2 text-sm font-normal text-gray-600">
-            {post.userName}
+            {post.user_Login}
           </h4>
         </div>
         <div className="photos">
@@ -81,7 +81,7 @@ export default function Post() {
 
         <CommentForm postId={postId} />
 
-        {cookies.username == post.userName ? (
+        {cookies.user_login == post.user_Login ? (
           <button
             className="relative bottom-0 right-0 float-right w-48 h-12 overflow-hidden text-lg bg-white rounded-lg shadow group"
             onClick={() => deletePost(post.id)}

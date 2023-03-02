@@ -17,7 +17,6 @@ function CreatePost() {
     data.append("userId", cookies.userId);
     data.append("title", title);
     data.append("text", text);
-    // data.append("files", photos);
 
     for (let i = 0; i < photos.length; i++) {
       data.append("files", photos[i]);
@@ -73,9 +72,17 @@ function CreatePost() {
             <div className="mb-8">
               <label
                 htmlFor="img"
-                className="relative flex min-h-[200px] items-center justify-center rounded-md border border-dashed border-[#e0e0e0] p-12 text-center"
+                className="relative flex flex-wrap min-h-[200px] items-center justify-center rounded-md border border-dashed border-[#e0e0e0] p-2 pb-10 overflow-hidden"
               >
-                {" "}
+                {photos.length > 1
+                  ? Array.from(photos).map((photo) => (
+                      <img
+                        src={URL.createObjectURL(photo)}
+                        alt={photo.name}
+                        className="w-1/4 h-auto m-1"
+                      />
+                    ))
+                  : null}
                 <input
                   type="file"
                   name="img"
@@ -83,8 +90,10 @@ function CreatePost() {
                   id="img"
                   onChange={(event) => {
                     setPhotos(event.target.files);
+                    console.log(photos);
                   }}
                   multiple
+                  className="absolute bottom-2"
                 />
               </label>
             </div>

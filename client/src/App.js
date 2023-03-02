@@ -18,7 +18,7 @@ import { SessionProvider } from "./context";
 const App = () => {
   const [cookies, setCookie, removeCookie] = useCookies({
     accessLvl: 0,
-    username: "",
+    user_login: "",
     userId: 0,
     loggedIn: false,
   });
@@ -36,7 +36,7 @@ const App = () => {
           />
           <Route path="/register" render={(props) => <Signup />} />
           <Route path="/post/:postId" render={(props) => <Post />} />
-          <Route path="/profile/:userName" render={(props) => <Profile />} />
+          <Route path="/profile/:id_user" render={(props) => <Profile />} />
           {cookies.accessLvl > 1 ? (
             <Route path="/adminPanel" render={(props) => <AdminPanel />} />
           ) : (

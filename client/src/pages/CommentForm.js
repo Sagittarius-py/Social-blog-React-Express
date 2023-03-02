@@ -43,7 +43,7 @@ export default function CommentForm(props) {
 
   return (
     <>
-      <div className="w-full mt-12 rounded-xl h-fit bg-slate-400 ">
+      <div className="w-full mt-12 rounded-xl h-fit bg-slate-400">
         <h1 className="px-2 pt-3 pb-2 mx-6 text-lg text-gray-800">Comments</h1>
         {comments.length ? (
           comments.length > 1 ? (
@@ -53,9 +53,11 @@ export default function CommentForm(props) {
                   <div className="relative flex flex-row w-11/12 p-2 mx-auto mt-4 rounded-md bg-slate-300">
                     <div className="flex flex-col w-full">
                       <a
-                        href={`http://localhost:3000/profile/${comment.userName}`}
+                        href={`http://localhost:3000/profile/${comment.user_id}`}
                       >
-                        <h1>{comment.userName}</h1>
+                        <h1>
+                          {comment.user_name + " " + comment.user_surname}
+                        </h1>
                       </a>
                       <p>{comment.commentText}</p>
                     </div>
@@ -81,9 +83,9 @@ export default function CommentForm(props) {
               <div className="relative flex flex-row w-11/12 p-2 mx-auto mt-4 rounded-md bg-slate-300">
                 <div className="flex flex-col w-full">
                   <a
-                    href={`http://localhost:3000/profile/${comments[0].userName}`}
+                    href={`http://localhost:3000/profile/${comments[0].user_Login}`}
                   >
-                    <h1>{comments[0].userName}</h1>
+                    <h1>{comments[0].user_Login}</h1>
                   </a>
                   <p>{comments[0].commentText}</p>
                 </div>
@@ -92,7 +94,7 @@ export default function CommentForm(props) {
                     onClick={(event) =>
                       delComment(event, comments[0].IDcomment)
                     }
-                    className="absolute right-0 mr-2 float-right w-12 h-8 overflow-hidden text-lg bg-white rounded-lg shadow group mh-auto"
+                    className="absolute right-0 float-right w-12 h-8 mr-2 overflow-hidden text-lg bg-white rounded-lg shadow group mh-auto"
                   >
                     <div className="absolute inset-0 w-3 bg-orange-500 transition-all duration-[250ms] ease-out group-hover:w-full"></div>
                     <span className="relative text-black group-hover:text-white">

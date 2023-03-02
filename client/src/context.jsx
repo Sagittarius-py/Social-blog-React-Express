@@ -4,13 +4,17 @@ const SessionContext = createContext();
 
 export function SessionProvider({ children }) {
   var [session, setSession] = useState({
-    username: "",
+    user_login: "",
     loggedIn: false,
     accessLvl: 0,
   });
 
-  const signIn = (username, accessLvl) => {
-    setSession({ username: username, loggedIn: true, accessLvl: accessLvl });
+  const signIn = (user_login, accessLvl) => {
+    setSession({
+      user_login: user_login,
+      loggedIn: true,
+      accessLvl: accessLvl,
+    });
   };
 
   return (

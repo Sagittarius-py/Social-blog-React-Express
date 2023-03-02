@@ -13,7 +13,7 @@ const ChatWindow = (props) => {
       Axios.get("http://localhost:3002/api/getUsers").then((data) => {
         var filteredUserList = [];
         data.data.map((user) => {
-          if (user.userName !== getCookieObject().username) {
+          if (user.user_Login !== getCookieObject().user_login) {
             filteredUserList.push(user);
           }
           return null;
@@ -24,8 +24,8 @@ const ChatWindow = (props) => {
     fetch();
   }, []);
 
-  const showChat = (username) => {
-    if (chatShown === "" || chatShown !== username) setChatShown(username);
+  const showChat = (user_login) => {
+    if (chatShown === "" || chatShown !== user_login) setChatShown(user_login);
     else setChatShown("");
     console.log(chatShown);
   };
@@ -43,8 +43,8 @@ const ChatWindow = (props) => {
                 <>
                   <div
                     className="relative z-20 flex items-center h-16 m-2 duration-500 bg-white rounded-md cursor-pointer drop-shadow-lg group/item"
-                    key={user.userName}
-                    onClick={() => showChat(user.userName)}
+                    key={user.user_Login}
+                    onClick={() => showChat(user.user_Login)}
                   >
                     <div
                       style={{
@@ -53,13 +53,13 @@ const ChatWindow = (props) => {
                       className="w-20 h-full duration-500 bg-center bg-cover rounded-l-md group-hover/item:w-10/12 bg-clip-padding"
                     />
                     <h1 className="absolute px-2 py-1 ml-24 text-xl duration-300 rounded-md group-hover/item:text-white group-hover/item:bg-slate-800">
-                      {user.userName}
+                      {user.user_Login}
                     </h1>
                     <ArrowIcon classNames="w-8 h-8 absolute right-11 rounded-lg opacity-0 group-hover/item:opacity-100 group-hover/item:bg-slate-800 duration-300" />
                   </div>
                   <div
                     className={` relative ${
-                      chatShown === user.userName ? " h-96" : "invisible h-0"
+                      chatShown === user.user_Login ? " h-96" : "invisible h-0"
                     } mx-2 bg-white z-0 duration-200 rounded-md`}
                   >
                     <div className="absolute bottom-0 left-0 flex items-center w-full px-1 rounded-md bg-slate-800 h-1/9">

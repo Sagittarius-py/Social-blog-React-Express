@@ -3,22 +3,20 @@ import Axios from "axios";
 import "../App.css";
 
 function CreateUser() {
-  const [userName, setUserName] = useState("");
+  const [user_Login, setUser_Login] = useState("");
   const [password, setPassword] = useState("");
   const [about, setAbout] = useState("");
   const [accessLVL, setAccess] = useState(1);
 
   const submitUser = () => {
     Axios.post("http://localhost:3002/api/createUser", {
-      username: userName,
+      user_login: user_Login,
       password: password,
       access_lvl: accessLVL,
       about: about,
     });
     refreshPage();
   };
-
-
 
   function refreshPage() {
     window.location.reload(false);
@@ -27,11 +25,11 @@ function CreateUser() {
   return (
     <div className="CreateUser">
       <div className="uploadPost">
-        <label>Username: </label>
+        <label>User_login: </label>
         <input
           type="text"
           onChange={(e) => {
-            setUserName(e.target.value);
+            setUser_Login(e.target.value);
           }}
         />
         <label>Password: </label>

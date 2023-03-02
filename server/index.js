@@ -35,7 +35,7 @@ let upload = multer({ storage: storage });
 // Get all posts and photos
 app.get("/api/get", (req, res) => {
   db.query(
-    "SELECT DISTINCT posts.*, photos.*, users.userName FROM posts \
+    "SELECT DISTINCT posts.*, photos.*, users.* FROM posts \
     INNER JOIN photos ON posts.post_id = photos.post_id INNER JOIN users ON \
     posts.id_user = users.id_user GROUP BY posts.post_id;",
     (err, result) => {
@@ -161,15 +161,25 @@ app.listen(PORT, () => {
 
 // Route for creating the user
 app.post("/api/createUser", upload.single("profilePic"), (req, res) => {
-  const username = req.body.username;
+  const user_login = req.body.user_login;
+  const user_name = req.body.user_name;
+  const user_surname = req.body.user_surname;
   const password = req.body.password;
   const access_lvl = req.body.access_lvl;
   const about = req.body.about;
   const profilePic = req.file.filename;
-  // console.log(username, password, access_lvl, about, profilePic);
+  // console.log(user_login, password, access_lvl, about, profilePic);
   db.query(
-    "INSERT INTO users (userName, password, access_lvl, about, profilePic) VALUES (?,?,?,?,?)",
-    [username, password, access_lvl, about, profilePic],
+    "INSERT INTO users (user_login,user_name, user_surname, password, access_lvl, about, profilePic) VALUES (?,?,?,?,?,?,?)",
+    [
+      user_login,
+      user_name,
+      user_surname,
+      password,
+      access_lvl,
+      about,
+      profilePic,
+    ],
     (err, result) => {
       if (err) {
         console.log(err);
@@ -179,11 +189,21 @@ app.post("/api/createUser", upload.single("profilePic"), (req, res) => {
   );
 });
 
-app.get("/api/getUsers/:username", (req, res) => {
-  const username = req.params.username;
+app.get("/api/getUsers/:id_user", (req, res) => {
+  const id_user = req.params.id_user;
+  db.query("SELECT * FROM users WHERE id_user = ?", id_user, (err, result) => {
+    if (err) {
+      console.log(err);
+    }
+    res.send(result);
+  });
+});
+
+app.get("/api/getUserNames/:user_Login", (req, res) => {
+  const user_Login = req.params.user_Login;
   db.query(
-    "SELECT * FROM users WHERE userName = ?",
-    username,
+    "SELECT * FROM users WHERE user_login = ?",
+    user_Login,
     (err, result) => {
       if (err) {
         console.log(err);
@@ -194,7 +214,7 @@ app.get("/api/getUsers/:username", (req, res) => {
 });
 
 app.get("/api/getUsers/", (req, res) => {
-  db.query("SELECT userName, profilePic FROM users", (err, result) => {
+  db.query("SELECT user_Login, profilePic FROM users", (err, result) => {
     if (err) {
       console.log(err);
     }
@@ -222,7 +242,7 @@ app.post("/api/writeComment/:id", (req, res) => {
 app.get("/api/getComments/:id", (req, res) => {
   const postId = req.params.id;
   db.query(
-    "SELECT comments.*, users.userName FROM comments INNER JOIN users ON comments.user_id = users.id_user WHERE post_id = ?",
+    "SELECT comments.*, users.id_user, users.user_name, users.user_surname FROM comments INNER JOIN users ON comments.user_id = users.id_user WHERE post_id = ?",
     postId,
     (err, result) => {
       if (err) {

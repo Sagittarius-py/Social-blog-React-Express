@@ -4,7 +4,8 @@ export default function NavBar(props) {
   const cookies = getCookieObject();
 
   function logOut() {
-    props.removeCookie("username");
+    window.location.reload(false);
+    props.removeCookie("user_login");
     props.removeCookie("loggedIn");
     props.removeCookie("accessLvl");
     props.removeCookie("userId");
@@ -35,7 +36,7 @@ export default function NavBar(props) {
               </a>
               <a
                 className="font-medium text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-500"
-                href={`/profile/${cookies.username}`}
+                href={`/profile/${cookies.userId}`}
               >
                 My Profile
               </a>

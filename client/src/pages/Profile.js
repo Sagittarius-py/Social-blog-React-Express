@@ -6,13 +6,15 @@ import Placeholder from "../images/1.jpg";
 import getCookieObject from "../getCookieObject";
 
 export default function Profile() {
-  let { userName } = useParams();
+  let { id_user } = useParams();
 
   const cookies = getCookieObject();
 
   const [user, setUser] = useState({
     userId: 0,
-    username: "",
+    user_login: "",
+    user_name: "",
+    user_surname: "",
     postCount: "",
     likesCount: "",
     accessLvl: 0,
@@ -21,12 +23,14 @@ export default function Profile() {
     rendered: 0,
   });
   useEffect(() => {
-    Axios.get(`http://localhost:3002/api/getUsers/${userName}`).then((data) => {
+    Axios.get(`http://localhost:3002/api/getUsers/${id_user}`).then((data) => {
       if (user.rendered < 2) {
         setUser((prevState) => {
           return {
             userId: data.data[0].id_user,
-            username: data.data[0].userName,
+            user_login: data.data[0].user_login,
+            user_name: data.data[0].user_name,
+            user_surname: data.data[0].user_surname,
             postCount: data.data[0].postCount,
             likesCount: data.data[0].likesCount,
             accessLvl: data.data[0].likesCount,
@@ -38,6 +42,7 @@ export default function Profile() {
       }
     });
   });
+  console.log(user);
 
   return (
     <>
@@ -73,8 +78,8 @@ export default function Profile() {
           alt=""
         />
         <div className="flex flex-col content">
-          <h1 className="mx-20 mt-32 mb-4 text-5xl uppercase">
-            {user.username}
+          <h1 className="mx-10 mt-32 mb-4 text-3xl uppercase">
+            {user.user_name} {user.user_surname}
           </h1>
           <div className="absolute flex flex-col w-1/3 h-48 p-2 mt-16 rounded-lg myCar right-12 bg-slate-300"></div>
           <p className="mx-12">Likes Count: {user.likesCount}</p>

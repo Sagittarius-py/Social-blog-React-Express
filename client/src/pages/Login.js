@@ -5,21 +5,22 @@ import { useHistory } from "react-router-dom";
 import Car1 from "../images/2.jpg";
 
 export default function Login(props) {
-  const [userName, setUserName] = useState("");
+  const [user_Login, setUser_Login] = useState("");
   const [password, setPassword] = useState("");
 
   let history = useHistory();
 
   const logIn = (event) => {
     event.preventDefault();
-    if (userName !== "") {
-      Axios.get(`http://localhost:3002/api/getUsers/${userName}`).then(
+    console.log(user_Login);
+    if (user_Login !== "") {
+      Axios.get(`http://localhost:3002/api/getUserNames/${user_Login}`).then(
         (data) => {
           if (data.data.length > 0) {
             if (data.data[0].password === password) {
               console.log(props);
-              // signIn(data.data[0].userName, data.data[0].access_lvl);
-              props.setCookie("username", data.data[0].userName.split("%")[0]);
+              // signIn(data.data[0].user_Login, data.data[0].access_lvl);
+              props.setCookie("user_login", data.data[0].user_login);
               props.setCookie("accessLvl", data.data[0].access_lvl);
               props.setCookie("userId", data.data[0].id_user);
               props.setCookie("loggedIn", true);
@@ -40,8 +41,7 @@ export default function Login(props) {
   return (
     <div className="flex h-screen">
       <div
-        className="hidden lg:flex w-full lg:w-1/2 login_img_section
-        justify-around items-center bg-center  bg-no-repeat bg-cover"
+        className="items-center justify-around hidden w-full bg-center bg-no-repeat bg-cover lg:flex lg:w-1/2 login_img_section"
         style={{ backgroundImage: `url(${Car1})` }}
       ></div>
       <div className="flex items-center justify-center w-full space-y-8 bg-white lg:w-1/2">
@@ -69,13 +69,13 @@ export default function Login(props) {
                 />
               </svg>
               <input
-                id="username"
+                id="user_login"
                 className="w-full pl-2 border-none outline-none "
                 type="text"
-                name="username"
-                placeholder="User Name"
+                name="user_login"
+                placeholder="E-mail"
                 onChange={(e) => {
-                  setUserName(e.target.value);
+                  setUser_Login(e.target.value);
                 }}
               />
             </div>
@@ -113,7 +113,7 @@ export default function Login(props) {
             <div className="flex justify-between mt-4">
               <a
                 href="/register"
-                className="text-sm ml-2 hover:text-blue-500 cursor-pointer hover:-translate-y-1 duration-500 transition-all"
+                className="ml-2 text-sm transition-all duration-500 cursor-pointer hover:text-blue-500 hover:-translate-y-1"
               >
                 Don't have an account yet?
               </a>
