@@ -60,8 +60,8 @@ export default function Profile() {
 
   return (
     <>
-      <div className="w-3/4 mx-auto my-24 overflow-hidden bg-white rounded-lg main h-fit drop-shadow-2xl ">
-        <p className="absolute z-10 px-2 py-1 m-4 bg-white rounded-lg opacity-90 drop-shadow-lg">
+      <div className="w-3/4 mx-auto my-24 overflow-hidden bg-white dark:bg-zinc-800 rounded-lg main h-fit drop-shadow-2xl ">
+        <p className="absolute z-10 px-2 py-1 m-4 bg-white rounded-lg opacity-90 drop-shadow-lg shadow-2xl shadow-slate-900">
           ID: {user.userId}
         </p>
         <div className={`z-0 overflow-hidden group/item `}>
@@ -80,13 +80,17 @@ export default function Profile() {
           alt=""
         />
         <div className="flex flex-col content">
-          <h1 className="mx-10 mt-32 mb-4 text-3xl uppercase">
+          <h1 className="mx-10 mt-32 mb-4 text-3xl uppercase dark:text-slate-50">
             {user.user_name} {user.user_surname}
           </h1>
-          <div className="absolute flex flex-col w-1/3 h-48 p-2 mt-16 rounded-lg myCar right-12 bg-slate-300"></div>
-          <p className="mx-12">Likes Count: {user.likesCount}</p>
-          <p className="mx-12">Comments Count: {user.likesCount}</p>
-          <p className="mx-12 my-6">
+          <div className="absolute flex flex-col w-2/3 h-48 p-2 mt-16 rounded-lg myCar right-12 bg-zinc-700 dark:bg-zinc-500  shadow-2xl shadow-slate-400  dark:shadow-slate-800"></div>
+          <p className="mx-12 dark:text-slate-200">
+            Likes Count: {user.likesCount}
+          </p>
+          <p className="mx-12 dark:text-slate-200">
+            Comments Count: {user.likesCount}
+          </p>
+          <p className="mx-12 my-6 dark:text-slate-100">
             About me: <br />
             {user.about}
           </p>

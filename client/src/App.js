@@ -15,16 +15,20 @@ import { useCookies } from "react-cookie";
 import { SessionProvider } from "./context";
 
 const App = () => {
-  const [cookies, setCookie, removeCookie] = useCookies({
-    accessLvl: 0,
-    user_login: "",
-    userId: 0,
-    loggedIn: false,
-    darkTheme: false,
-  });
+  const [cookies, setCookie, removeCookie] = useCookies();
+
+  if (
+    localStorage.theme === "light" ||
+    (!("theme" in localStorage) &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches)
+  ) {
+    document.documentElement.classList.add("dark");
+  } else {
+    document.documentElement.classList.remove("dark");
+  }
 
   return (
-    <div>
+    <div className="bg-white dark:bg-neutral-800 pt-8 min-h-screen">
       <SessionProvider>
         <NavBar />
         <Router>

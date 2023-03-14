@@ -29,8 +29,8 @@ function CreatePost() {
   };
 
   return (
-    <div className="flex items-center justify-center max-h-screen p-12">
-      <div className="mx-auto w-full max-w-[550px] bg-white">
+    <div className="flex items-center justify-center max-h-screen p-24">
+      <div className="mx-auto w-full max-w-[550px] bg-white rounded-lg">
         <div className="py-6 px-9">
           <div className="mb-5">
             <label
