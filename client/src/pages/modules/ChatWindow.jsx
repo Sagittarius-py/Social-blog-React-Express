@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
+import { useCookies } from "react-cookie";
+
 import Axios from "axios";
-import getCookieObject from "../../getCookieObject";
 import ArrowIcon from "../../svg/ArrowIcon";
 import SendIcon from "../../svg/SendIcon";
 
 const ChatWindow = (props) => {
+  const [cookies, setCookies, removeCookie] = useCookies();
   const [userList, setUserList] = useState(["Brak użytkowników"]);
   const [chatShown, setChatShown] = useState("");
 
@@ -13,7 +15,7 @@ const ChatWindow = (props) => {
       Axios.get("http://localhost:3002/api/getUsers").then((data) => {
         var filteredUserList = [];
         data.data.map((user) => {
-          if (user.user_Login !== getCookieObject().user_login) {
+          if (user.user_Login !== cookies.user_login) {
             filteredUserList.push(user);
           }
           return null;

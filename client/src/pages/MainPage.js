@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { useCookies } from "react-cookie";
+
 import Axios from "axios";
 import "../App.css";
 import PostCard from "./PostCard";
 
-import getCookieObject from "../getCookieObject";
-
 function MainPage() {
   const [postList, setPostList] = useState([]);
 
-  console.log(getCookieObject());
+  const [cookies, setCookies, removeCookie] = useCookies();
 
   useEffect(() => {
     Axios.get("http://localhost:3002/api/get").then((data) => {

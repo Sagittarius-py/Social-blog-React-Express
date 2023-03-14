@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import getCookieObject from "../getCookieObject";
+import { useCookies } from "react-cookie";
+
 import Axios from "axios";
 
 export default function CommentForm(props) {
@@ -8,7 +9,7 @@ export default function CommentForm(props) {
   let [comments, setComments] = useState({});
   let [rendered, setRendered] = useState(0);
 
-  const cookies = getCookieObject();
+  const [cookies, setCookies, removeCookie] = useCookies();
   let { postId } = useParams();
 
   useEffect(() => {

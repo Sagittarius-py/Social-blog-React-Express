@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import { useHistory } from "react-router-dom";
+
 import Axios from "axios";
 import CommentForm from "./CommentForm";
 import Gallery from "react-photo-gallery";
-import getCookieObject from "../getCookieObject";
-import { useHistory } from "react-router-dom";
 
 export default function Post() {
   let history = useHistory();
-  const cookies = getCookieObject();
+  const [cookies, setCookies, removeCookie] = useCookies();
   let { postId } = useParams();
   const [post, setPost] = useState({
     title: "",

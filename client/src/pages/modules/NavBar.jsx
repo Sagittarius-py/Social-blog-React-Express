@@ -1,15 +1,15 @@
-import getCookieObject from "../../getCookieObject";
+import Toggle from "./Toggle";
+import React from "react";
+import { useCookies } from "react-cookie";
 
-export default function NavBar(props) {
-  const cookies = getCookieObject();
+export default function NavBar() {
+  const [cookies, setCookies, removeCookie] = useCookies();
 
   function logOut() {
-    window.location.reload(false);
-    props.removeCookie("user_login");
-    props.removeCookie("loggedIn");
-    props.removeCookie("accessLvl");
-    props.removeCookie("userId");
-    window.location.reload(false);
+    removeCookie("user_login");
+    removeCookie("loggedIn");
+    removeCookie("accessLvl");
+    removeCookie("userId");
   }
 
   return (
@@ -72,6 +72,7 @@ export default function NavBar(props) {
               </a>
             </>
           )}
+          <Toggle />
         </div>
       </nav>
     </header>

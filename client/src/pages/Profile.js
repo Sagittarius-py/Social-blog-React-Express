@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Axios from "axios";
-import Placeholder from "../images/1.jpg";
+import { useCookies } from "react-cookie";
 
-import getCookieObject from "../getCookieObject";
+import Axios from "axios";
+import PostCard from "./PostCard";
 
 export default function Profile() {
   let { id_user } = useParams();
 
-  const cookies = getCookieObject();
+  const [cookies, setCookies, removeCookie] = useCookies();
 
   const [user, setUser] = useState({
     userId: 0,
@@ -20,8 +20,12 @@ export default function Profile() {
     accessLvl: 0,
     about: "",
     rofilePic: "",
+    backgroundPic: "",
     rendered: 0,
   });
+
+  const [posts, setPosts] = useState("");
+
   useEffect(() => {
     Axios.get(`http://localhost:3002/api/getUsers/${id_user}`).then((data) => {
       if (user.rendered < 2) {
@@ -36,11 +40,21 @@ export default function Profile() {
             accessLvl: data.data[0].likesCount,
             about: data.data[0].about,
             profilePic: data.data[0].profilePic,
+            backgroundPic: data.data[0].backgroundPic,
             rendered: prevState.rendered + 1,
           };
         });
       }
     });
+    console.log(posts);
+    if (user.rendered < 1) {
+      Axios.get(`http://localhost:3002/api/getPostsByUser/${id_user}`).then(
+        (data) => {
+          setPosts(data.data);
+          console.log(data);
+        }
+      );
+    }
   });
   console.log(user);
 
@@ -50,25 +64,13 @@ export default function Profile() {
         <p className="absolute z-10 px-2 py-1 m-4 bg-white rounded-lg opacity-90 drop-shadow-lg">
           ID: {user.userId}
         </p>
-        <div
-          className={`z-0 overflow-hidden group/item ${
-            cookies.loggedIn ? "cursor-pointer " : null
-          }`}
-        >
+        <div className={`z-0 overflow-hidden group/item `}>
           <img
-            src={Placeholder}
-            className={`relative object-cover w-full ${
-              cookies.loggedIn
-                ? "group-hover/item:blur-sm group-hover/item:scale-110 "
-                : null
-            } aspect-video h-96 `}
+            src={`http://localhost:3002/images/${user.backgroundPic}
+`}
+            className={`relative object-cover w-full   aspect-video h-96 `}
             alt=""
           />
-          {cookies.loggedIn ? (
-            <h1 className="absolute invisible px-4 py-2 mx-auto text-4xl transform -translate-x-1/2 -translate-y-48 bg-white rounded-md top-1/2 left-1/2 group-hover/item:visible">
-              Edit
-            </h1>
-          ) : null}
         </div>
 
         <img
@@ -88,6 +90,40 @@ export default function Profile() {
             About me: <br />
             {user.about}
           </p>
+        </div>
+        <div id="postlist">
+          {posts.length > 0 ? (
+            posts.length > 1 ? (
+              posts.map((val, key) => {
+                return (
+                  <PostCard
+                    key={key}
+                    id={val.post_id}
+                    postTitle={val.title}
+                    postText={val.post_text}
+                    postCreator={
+                      val.user_name
+                        ? val.user_name + " " + val.user_surname
+                        : val.user_login
+                    }
+                    postCreatorID={val.id_user}
+                    imageLink={val.photoName}
+                    postLikes={val.likes}
+                  />
+                );
+              })
+            ) : (
+              <PostCard
+                id={posts[0].post_id}
+                postTitle={posts[0].title}
+                postText={posts[0].post_text}
+                postCreator=""
+                postCreatorID={posts[0].id_user}
+                imageLink={posts[0].photoName}
+                postLikes={posts[0].likes}
+              />
+            )
+          ) : null}
         </div>
       </div>
     </>

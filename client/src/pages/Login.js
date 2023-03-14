@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import Axios from "axios";
 import { useHistory } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 import Car1 from "../images/2.jpg";
 
-export default function Login(props) {
+export default function Login() {
+  const [cookies, setCookie, removeCookie] = useCookies();
   const [user_Login, setUser_Login] = useState("");
   const [password, setPassword] = useState("");
 
@@ -18,12 +20,10 @@ export default function Login(props) {
         (data) => {
           if (data.data.length > 0) {
             if (data.data[0].password === password) {
-              console.log(props);
-              // signIn(data.data[0].user_Login, data.data[0].access_lvl);
-              props.setCookie("user_login", data.data[0].user_login);
-              props.setCookie("accessLvl", data.data[0].access_lvl);
-              props.setCookie("userId", data.data[0].id_user);
-              props.setCookie("loggedIn", true);
+              setCookie("user_login", data.data[0].user_login);
+              setCookie("accessLvl", data.data[0].access_lvl);
+              setCookie("userId", data.data[0].id_user);
+              setCookie("loggedIn", true);
 
               history.push("/");
               window.location.reload(false);

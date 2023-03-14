@@ -1,9 +1,10 @@
 import Axios from "axios";
 import { useHistory } from "react-router-dom";
-import getCookieObject from "../getCookieObject";
-const cookies = getCookieObject();
+import { useCookies } from "react-cookie";
 
 const LikePost = (id) => {
+  const [cookies, setCookies, removeCookie] = useCookies();
+
   let userId = { userId: cookies.userId };
   Axios.post(`http://localhost:3002/api/like/${id}`, userId).then(
     (response) => {
@@ -14,6 +15,8 @@ const LikePost = (id) => {
 };
 
 export default function PostCard(props) {
+  const [cookies, setCookies, removeCookie] = useCookies();
+
   let history = useHistory();
   return (
     <div className="w-2/4 mx-auto my-8 overflow-hidden rounded-lg bg-gray-50 drop-shadow-2xl h-fit">

@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { useCookies } from "react-cookie";
+
 import Axios from "axios";
 import "../App.css";
-import getCookieObject from "../getCookieObject";
 
 function CreatePost() {
   const history = useHistory();
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const [photos, setPhotos] = useState("");
-  const cookies = getCookieObject();
+  const [cookies, setCookies, removeCookie] = useCookies();
 
   const submitPost = () => {
     const data = new FormData();
@@ -28,7 +29,7 @@ function CreatePost() {
   };
 
   return (
-    <div className="flex items-center justify-center p-12">
+    <div className="flex items-center justify-center max-h-screen p-12">
       <div className="mx-auto w-full max-w-[550px] bg-white">
         <div className="py-6 px-9">
           <div className="mb-5">
@@ -72,7 +73,7 @@ function CreatePost() {
             <div className="mb-8">
               <label
                 htmlFor="img"
-                className="relative flex flex-wrap min-h-[200px] items-center justify-center rounded-md border border-dashed border-[#e0e0e0] p-2 pb-10 overflow-hidden"
+                className="relative flex flex-wrap min-h-[200px] items-center justify-center rounded-md border border-dashed border-slate-500 p-2 pb-10 overflow-hidden"
               >
                 {photos.length > 1
                   ? Array.from(photos).map((photo) => (
@@ -93,7 +94,7 @@ function CreatePost() {
                     console.log(photos);
                   }}
                   multiple
-                  className="absolute bottom-2"
+                  className="absolute text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 bottom-2"
                 />
               </label>
             </div>

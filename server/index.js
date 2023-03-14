@@ -5,11 +5,27 @@ const path = require("path");
 const multer = require("multer");
 const mysql = require("mysql");
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+
 const app = express();
 
 const PORT = process.env.PORT || 3002;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+  })
+);
+app.use(function (req, res, next) {
+  res.header("Content-Type", "application/json;charset=UTF-8");
+  res.header("Access-Control-Allow-Credentials", true);
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
 app.use(express.static("public"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -38,6 +54,22 @@ app.get("/api/get", (req, res) => {
     "SELECT DISTINCT posts.*, photos.*, users.* FROM posts \
     INNER JOIN photos ON posts.post_id = photos.post_id INNER JOIN users ON \
     posts.id_user = users.id_user GROUP BY posts.post_id;",
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      console.log(err, result);
+      res.send(result);
+    }
+  );
+});
+
+app.get("/api/getPostsByUser/:id", (req, res) => {
+  const user_id = req.params.id;
+  db.query(
+    "SELECT DISTINCT posts.*, photos.* FROM posts \
+    INNER JOIN photos ON posts.post_id = photos.post_id WHERE posts.id_user = ? GROUP BY posts.post_id ;",
+    parseInt(user_id),
     (err, result) => {
       if (err) {
         console.log(err);
@@ -153,24 +185,20 @@ app.delete("/api/delete/:id", (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on ${PORT}`);
-});
-
 // ----------------------- USERS
 
 // Route for creating the user
-app.post("/api/createUser", upload.single("profilePic"), (req, res) => {
+app.post("/api/createUser", upload.array("files"), (req, res) => {
   const user_login = req.body.user_login;
   const user_name = req.body.user_name;
   const user_surname = req.body.user_surname;
   const password = req.body.password;
   const access_lvl = req.body.access_lvl;
   const about = req.body.about;
-  const profilePic = req.file.filename;
-  // console.log(user_login, password, access_lvl, about, profilePic);
+  const profilePic = req.files[0].filename;
+  const backgroundPic = req.files[1].filename;
   db.query(
-    "INSERT INTO users (user_login,user_name, user_surname, password, access_lvl, about, profilePic) VALUES (?,?,?,?,?,?,?)",
+    "INSERT INTO users (user_login,user_name, user_surname, password, access_lvl, about, profilePic, backgroundPic) VALUES (?,?,?,?,?,?,?,?)",
     [
       user_login,
       user_name,
@@ -179,6 +207,7 @@ app.post("/api/createUser", upload.single("profilePic"), (req, res) => {
       access_lvl,
       about,
       profilePic,
+      backgroundPic,
     ],
     (err, result) => {
       if (err) {
@@ -262,4 +291,8 @@ app.delete("/api/deleteComment/:id", (req, res) => {
       console.log(err);
     }
   });
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is running on ${PORT}`);
 });

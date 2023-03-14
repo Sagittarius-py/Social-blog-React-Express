@@ -17,12 +17,12 @@ const ChatButton = () => {
       <ChatWindow isShown={isShown} />
       <button
         onClick={toggleChatWindow}
-        className="z-50 sticky drop-shadow-lg hover:bottom-10 bottom-8 flex left-8 rounded-full w-20 h-20 bg-blue-600 hover:bg-blue-700 duration-200 justify-center items-center"
+        className="sticky z-50 flex items-center justify-center w-20 h-20 duration-200 bg-blue-600 rounded-full drop-shadow-lg hover:bottom-10 bottom-8 left-8 hover:bg-blue-700"
       >
         {isShown ? (
-          <img className=" w-10  h-10 invert" src={closeIco} alt="ico" />
+          <img className="w-10 h-10 invert" src={closeIco} alt="ico" />
         ) : (
-          <img className=" w-12  h-12 invert" src={chatIco} alt="ico" />
+          <img className="w-12 h-12 invert" src={chatIco} alt="ico" />
         )}
       </button>
     </>

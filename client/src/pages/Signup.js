@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import Axios from "axios";
 import { useHistory } from "react-router-dom";
+import ProfilPH from "../images/Profile.png";
 
 import Car1 from "../images/1.jpg";
+import background from "../images/bg_ph.jpg";
 
 export default function Signup(props) {
   const [user_Login, setUser_Login] = useState("");
@@ -13,6 +15,7 @@ export default function Signup(props) {
   const [about, setAbout] = useState("");
   const [accessLVL, setAccess] = useState(0);
   const [photos, setPhotos] = useState("");
+  const [backgroundPhoto, setBackgroundPhoto] = useState("");
 
   let history = useHistory();
 
@@ -25,12 +28,10 @@ export default function Signup(props) {
     datadata.append("password", password);
     datadata.append("access_lvl", accessLVL);
     datadata.append("about", about);
+    datadata.append("files", photos[0]);
+    datadata.append("files", backgroundPhoto[0]);
 
-    for (let i = 0; i < photos.length; i++) {
-      datadata.append("profilePic", photos[i]);
-    }
-
-    // event.preventDefault();
+    event.preventDefault();
     Axios.get(`http://localhost:3002/api/getUsers/${user_Login}`).then(
       (data) => {
         if (data.data.length === 0) {
@@ -60,22 +61,55 @@ export default function Signup(props) {
       <div className="flex items-center justify-center w-full space-y-8 bg-white lg:w-1/2">
         <div className="w-full px-8 md:px-32 lg:px-24">
           <form className="p-5 bg-white rounded-md shadow-2xl">
-            <h1 className="mb-1 text-2xl font-bold text-gray-800">Welcome!</h1>
-            <p className="mb-8 text-sm font-normal text-gray-600">
-              We are happy to meet You!
-            </p>
-            <div className="flex items-center px-3 py-2 mb-8 ">
-              <input
-                className="w-24 h-24 bg-black rounded-full"
-                type="file"
-                name="img"
-                accept="image/*"
-                id="img"
-                onChange={(event) => {
-                  setPhotos(event.target.files);
-                  console.log(event.target.files);
-                }}
-              />
+            <h1 className="mb-4 text-2xl font-bold text-gray-800">Welcome!</h1>
+
+            <div className="flex justify-around">
+              <div className="flex flex-col items-center justify-center px-8 py-2 mx-4 mb-8 border-2 border-gray-200 rounded-2xl">
+                <h5>Profile Picture</h5>
+                <img
+                  src={
+                    photos.length > 0
+                      ? URL.createObjectURL(photos[0])
+                      : ProfilPH
+                  }
+                  alt="profile_ph"
+                  className="object-cover w-32 h-32 m-1 rounded-full"
+                />
+                <input
+                  className="block text-sm text-gray-500 w-28 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                  type="file"
+                  name="img"
+                  accept="image/*"
+                  id="img"
+                  onChange={(event) => {
+                    setPhotos(event.target.files);
+                    console.log(event.target.files);
+                  }}
+                />
+              </div>
+              <div className="flex flex-col items-center justify-center px-3 py-2 mb-8 ml-4 border-2 border-gray-200 rounded-2xl">
+                <h5>Background Image</h5>
+                <img
+                  src={
+                    backgroundPhoto.length > 0
+                      ? URL.createObjectURL(backgroundPhoto[0])
+                      : background
+                  }
+                  alt="profile_ph"
+                  className="object-cover w-64 h-32 m-1 rounded-lg"
+                />
+                <input
+                  className="block text-sm text-gray-500 w-28 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                  type="file"
+                  name="img"
+                  accept="image/*"
+                  id="imgBg"
+                  onChange={(event) => {
+                    setBackgroundPhoto(event.target.files);
+                    console.log(event.target.files);
+                  }}
+                />
+              </div>
             </div>
             <div className="flex items-center px-3 py-2 mb-8 border-2 rounded-2xl">
               <input
