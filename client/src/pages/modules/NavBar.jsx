@@ -13,7 +13,7 @@ export default function NavBar() {
   }
 
   return (
-    <header className="fixed top-0 z-50 flex flex-wrap w-full py-4 text-sm sm:justify-start sm:flex-nowrap bg-slate-900 dark:bg-blue-800">
+    <header className="fixed top-0 z-30 flex flex-wrap w-full py-4 text-sm sm:justify-start sm:flex-nowrap bg-slate-900 dark:bg-blue-800">
       <nav
         className="max-w-[85rem] w-full mx-auto px-4 sm:flex sm:items-center sm:justify-between"
         aria-label="Global"

@@ -36,7 +36,7 @@ const ChatWindow = (props) => {
     <div
       className={`flex-col pt-16 fixed top-0 left-0 ${
         props.isShown ? "w-2/6" : "w-0"
-      } h-full bg-blue-600 z-40 duration-200 opacity-90 hover:opacity-100 `}
+      } h-full bg-blue-600 z-50 duration-200 opacity-90 hover:opacity-100 `}
     >
       {userList.length > 1
         ? props.isShown
