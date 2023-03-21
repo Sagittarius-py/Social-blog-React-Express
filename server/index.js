@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 3002;
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    // origin: "http://0.0.0.0:3000",
     optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
   })
 );
