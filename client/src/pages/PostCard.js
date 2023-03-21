@@ -6,7 +6,7 @@ const LikePost = (id) => {
   const [cookies, setCookies, removeCookie] = useCookies();
 
   let userId = { userId: cookies.userId };
-  Axios.post(`http://localhost:3002/api/like/${id}`, userId).then(
+  Axios.post(`https://mysql-deploy.herokuapp.com/api/like/${id}`, userId).then(
     (response) => {
       console.log(response);
     }
@@ -21,14 +21,16 @@ export default function PostCard(props) {
   return (
     <div className="w-2/4 mx-auto my-8 overflow-hidden rounded-lg dark:bg-neutral-900 bg-gray-50 shadow-2xl shadow-slate-400 h-fit dark:shadow-slate-900">
       <img
-        src={`http://localhost:3002/images/${props.imageLink}`}
+        src={`https://mysql-deploy.herokuapp.com/images/${props.imageLink}`}
         className="object-cover w-full cursor-pointer aspect-video"
         alt=""
         onClick={() => history.push(`/post/${props.id}`)}
       />
       <div className="p-4">
         <p className="mb-1 text-sm text-primary-500 dark:text-blue-100">
-          <a href={`http://localhost:3000/profile/${props.postCreatorID}`}>
+          <a
+            href={`http://mysql-deploy.herokuapp.com/profile/${props.postCreatorID}`}
+          >
             {props.postCreator}
           </a>{" "}
           | <time>18 Nov 2022</time>

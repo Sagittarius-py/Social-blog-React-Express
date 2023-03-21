@@ -23,7 +23,7 @@ function CreatePost() {
       data.append("files", photos[i]);
     }
     if (title !== "" && text !== "" && photos !== "") {
-      Axios.post("http://localhost:3002/api/create", data);
+      Axios.post("https://mysql-deploy.herokuapp.com/api/create", data);
       history.push("/");
     }
   };

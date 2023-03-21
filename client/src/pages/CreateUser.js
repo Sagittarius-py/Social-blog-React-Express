@@ -9,7 +9,7 @@ function CreateUser() {
   const [accessLVL, setAccess] = useState(1);
 
   const submitUser = () => {
-    Axios.post("http://localhost:3002/api/createUser", {
+    Axios.post("https://mysql-deploy.herokuapp.com/api/createUser", {
       user_login: user_Login,
       password: password,
       access_lvl: accessLVL,

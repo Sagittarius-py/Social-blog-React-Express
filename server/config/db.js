@@ -1,10 +1,10 @@
 const mysql = require("mysql");
 
 const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "sagittarius-social-db",
+  host: "eu-cdbr-west-03.cleardb.net",
+  user: "b68ef8cd6aafde",
+  password: "51906aea",
+  database: "heroku_16d6e6d85b39369",
 });
 
 db.connect(function (err) {
@@ -13,3 +13,5 @@ db.connect(function (err) {
 });
 
 module.exports = db;
+
+// mysql://b68ef8cd6aafde:51906aea@eu-cdbr-west-03.cleardb.net/heroku_16d6e6d85b39369?

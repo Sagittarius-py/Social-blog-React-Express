@@ -13,14 +13,14 @@ export default function CommentForm(props) {
   let { postId } = useParams();
 
   useEffect(() => {
-    Axios.get(`http://localhost:3002/api/getComments/${postId}`).then(
-      (data) => {
-        if (rendered < 2) {
-          setComments(data.data);
-          setRendered(2);
-        }
+    Axios.get(
+      `https://mysql-deploy.herokuapp.com/api/getComments/${postId}`
+    ).then((data) => {
+      if (rendered < 2) {
+        setComments(data.data);
+        setRendered(2);
       }
-    );
+    });
   });
 
   const addComment = (event, postId) => {
@@ -28,16 +28,19 @@ export default function CommentForm(props) {
     let data = {};
     data = { userId: cookies.userId, text: commentText };
 
-    Axios.post(`http://localhost:3002/api/writeComment/${postId}`, data);
+    Axios.post(
+      `https://mysql-deploy.herokuapp.com/api/writeComment/${postId}`,
+      data
+    );
     window.location.reload(false);
   };
 
   const delComment = (event, IDcomment) => {
-    Axios.delete(`http://localhost:3002/api/deleteComment/${IDcomment}`).then(
-      (response) => {
-        alert("you deleted a comment");
-      }
-    );
+    Axios.delete(
+      `https://mysql-deploy.herokuapp.com/api/deleteComment/${IDcomment}`
+    ).then((response) => {
+      alert("you deleted a comment");
+    });
     window.location.reload(false);
   };
 
@@ -55,7 +58,7 @@ export default function CommentForm(props) {
                   <div className="relative flex flex-row align-middle w-11/12 p-2 mx-auto mt-4 rounded-md bg-slate-300 dark:bg-zinc-700 shadow-2xl shadow-slate-400 dark:shadow-slate-900">
                     <div className="flex flex-col w-full">
                       <a
-                        href={`http://localhost:3000/profile/${comment.user_id}`}
+                        href={`http://mysql-deploy.herokuapp.com/profile/${comment.user_id}`}
                         className="text-slate-900 dark:text-slate-50"
                       >
                         <h1>
@@ -88,7 +91,7 @@ export default function CommentForm(props) {
               <div className="relative flex flex-row w-11/12 p-2 mx-auto mt-8 rounded-md bg-slate-300 ">
                 <div className="flex flex-col w-full">
                   <a
-                    href={`http://localhost:3000/profile/${comments[0].user_Login}`}
+                    href={`http://mysql-deploy.herokuapp.com/profile/${comments[0].user_Login}`}
                   >
                     <h1>{comments[0].user_Login}</h1>
                   </a>

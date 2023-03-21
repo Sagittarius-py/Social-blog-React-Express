@@ -16,25 +16,25 @@ export default function Login() {
     event.preventDefault();
     console.log(user_Login);
     if (user_Login !== "") {
-      Axios.get(`http://localhost:3002/api/getUserNames/${user_Login}`).then(
-        (data) => {
-          if (data.data.length > 0) {
-            if (data.data[0].password === password) {
-              setCookie("user_login", data.data[0].user_login);
-              setCookie("accessLvl", data.data[0].access_lvl);
-              setCookie("userId", data.data[0].id_user);
-              setCookie("loggedIn", true);
+      Axios.get(
+        `https://mysql-deploy.herokuapp.com/api/getUserNames/${user_Login}`
+      ).then((data) => {
+        if (data.data.length > 0) {
+          if (data.data[0].password === password) {
+            setCookie("user_login", data.data[0].user_login);
+            setCookie("accessLvl", data.data[0].access_lvl);
+            setCookie("userId", data.data[0].id_user);
+            setCookie("loggedIn", true);
 
-              history.push("/");
-              window.location.reload(false);
-            } else {
-              alert("Bad password");
-            }
+            history.push("/");
+            window.location.reload(false);
           } else {
-            alert("User with given name doesn't exist");
+            alert("Bad password");
           }
+        } else {
+          alert("User with given name doesn't exist");
         }
-      );
+      });
     }
   };
 

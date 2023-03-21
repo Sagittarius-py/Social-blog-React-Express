@@ -1,15 +1,12 @@
 const express = require("express");
 const db = require("./config/db");
 const cors = require("cors");
-const path = require("path");
 const multer = require("multer");
-const mysql = require("mysql");
 const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
 
 const app = express();
 
-const PORT = process.env.PORT || 3002;
+const PORT = 3002;
 
 app.use(
   cors({
@@ -17,15 +14,7 @@ app.use(
     optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
   })
 );
-app.use(function (req, res, next) {
-  res.header("Content-Type", "application/json;charset=UTF-8");
-  res.header("Access-Control-Allow-Credentials", true);
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
+
 app.use(express.static("public"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -58,7 +47,6 @@ app.get("/api/get", (req, res) => {
       if (err) {
         console.log(err);
       }
-      console.log(err, result);
       res.send(result);
     }
   );
@@ -74,7 +62,6 @@ app.get("/api/getPostsByUser/:id", (req, res) => {
       if (err) {
         console.log(err);
       }
-      console.log(err, result);
       res.send(result);
     }
   );
@@ -103,7 +90,6 @@ app.post("/api/create", upload.array("files"), (req, res) => {
     "INSERT INTO posts (title, post_text, id_user) VALUES (?,?,?)",
     [title, text, userId],
     (err, result) => {
-      console.log(result);
       if (!req.files) {
         console.log("No file upload");
       } else if (req.files.length == 1) {
@@ -119,7 +105,6 @@ app.post("/api/create", upload.array("files"), (req, res) => {
       } else {
         req.files.map((file) => {
           console.log(file.filename);
-          var img_src = "http://127.0.0.1:3002/images/" + file.filename;
           db.query(
             "INSERT INTO photos(photoName, post_id)VALUES(?,?)",
             [file.filename, result.insertId],
@@ -157,7 +142,6 @@ app.post("/api/like/:id", (req, res) => {
       if (err) {
         console.log(err);
       }
-      console.log(res);
     }
   );
 
@@ -213,7 +197,6 @@ app.post("/api/createUser", upload.array("files"), (req, res) => {
       if (err) {
         console.log(err);
       }
-      console.log(result);
     }
   );
 });
@@ -293,6 +276,6 @@ app.delete("/api/deleteComment/:id", (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
+app.listen(process.env.PORT || PORT, () => {
   console.log(`Server is running on ${PORT}`);
 });
