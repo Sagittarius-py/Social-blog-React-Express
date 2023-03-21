@@ -45,9 +45,7 @@ export default function Post() {
   };
 
   useEffect(() => {
-    Axios.get(
-      `https://mysql-deploy.herokuapp.com/api/getFromId/${postId}`
-    ).then((data) => {
+    Axios.get(`http://localhost:3002/api/getFromId/${postId}`).then((data) => {
       if (post.rendered < 1) {
         var imagesNames = [];
         data.data.map((record) => {
@@ -80,7 +78,7 @@ export default function Post() {
   const photoList = [];
   post.photoNames.map((photo) => {
     photoList.push({
-      src: `https://mysql-deploy.herokuapp.com/images/${photo}`,
+      src: `http://localhost:3002/images/${photo}`,
       width: 4,
       height: 3,
       className: "photoGalleryPhoto",
@@ -89,11 +87,11 @@ export default function Post() {
   });
 
   const deletePost = (id) => {
-    Axios.delete(
-      `https://mysql-deploy.herokuapp.com/api/delete/${postId}`
-    ).then((response) => {
-      alert("you deleted a post");
-    });
+    Axios.delete(`http://localhost:3002/api/delete/${postId}`).then(
+      (response) => {
+        alert("you deleted a post");
+      }
+    );
   };
 
   return (

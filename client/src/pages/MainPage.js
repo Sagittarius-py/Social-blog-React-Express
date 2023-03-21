@@ -11,7 +11,7 @@ function MainPage() {
   const [cookies, setCookies, removeCookie] = useCookies();
 
   useEffect(() => {
-    Axios.get("https://mysql-deploy.herokuapp.com/api/get").then((data) => {
+    Axios.get("http://localhost:3002/api/get").then((data) => {
       console.log(data.data);
       setPostList(data.data);
     });

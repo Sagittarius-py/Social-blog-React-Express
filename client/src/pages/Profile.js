@@ -27,9 +27,7 @@ export default function Profile() {
   const [posts, setPosts] = useState("");
 
   useEffect(() => {
-    Axios.get(
-      `https://mysql-deploy.herokuapp.com/api/getUsers/${id_user}`
-    ).then((data) => {
+    Axios.get(`http://localhost:3002/api/getUsers/${id_user}`).then((data) => {
       if (user.rendered < 2) {
         setUser((prevState) => {
           return {
@@ -50,12 +48,12 @@ export default function Profile() {
     });
     console.log(posts);
     if (user.rendered < 1) {
-      Axios.get(
-        `https://mysql-deploy.herokuapp.com/api/getPostsByUser/${id_user}`
-      ).then((data) => {
-        setPosts(data.data);
-        console.log(data);
-      });
+      Axios.get(`http://localhost:3002/api/getPostsByUser/${id_user}`).then(
+        (data) => {
+          setPosts(data.data);
+          console.log(data);
+        }
+      );
     }
   });
   console.log(user);
@@ -68,7 +66,7 @@ export default function Profile() {
         </p>
         <div className={`z-0 overflow-hidden group/item `}>
           <img
-            src={`https://mysql-deploy.herokuapp.com/images/${user.backgroundPic}
+            src={`http://localhost:3002/images/${user.backgroundPic}
 `}
             className={`relative object-cover w-full   aspect-video h-96 `}
             alt=""
@@ -76,7 +74,7 @@ export default function Profile() {
         </div>
 
         <img
-          src={`https://mysql-deploy.herokuapp.com/images/${user.profilePic}
+          src={`http://localhost:3002/images/${user.profilePic}
 `}
           className="absolute z-10 object-cover w-48 h-48 mx-10 -mt-24 rounded-full "
           alt=""

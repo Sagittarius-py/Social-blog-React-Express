@@ -32,27 +32,24 @@ export default function Signup(props) {
     datadata.append("files", backgroundPhoto[0]);
 
     event.preventDefault();
-    Axios.get(
-      `https://mysql-deploy.herokuapp.com/api/getUsers/${user_Login}`
-    ).then((data) => {
-      if (data.data.length === 0) {
-        if (password === confPassword && password.length > 0) {
-          if (accessLVL > 0) {
-            Axios.post(
-              "https://mysql-deploy.herokuapp.com/api/createUser",
-              datadata
-            );
-            history.push("/login");
+    Axios.get(`http://localhost:3002/api/getUsers/${user_Login}`).then(
+      (data) => {
+        if (data.data.length === 0) {
+          if (password === confPassword && password.length > 0) {
+            if (accessLVL > 0) {
+              Axios.post("http://localhost:3002/api/createUser", datadata);
+              history.push("/login");
+            } else {
+              alert("You have to choose any access level");
+            }
           } else {
-            alert("You have to choose any access level");
+            alert("Passwords aren't the same!");
           }
         } else {
-          alert("Passwords aren't the same!");
+          alert("User with this user name already exists");
         }
-      } else {
-        alert("User with this user name already exists");
       }
-    });
+    );
   };
 
   return (

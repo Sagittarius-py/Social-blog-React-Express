@@ -12,18 +12,16 @@ const ChatWindow = (props) => {
 
   useEffect(() => {
     async function fetch() {
-      Axios.get("https://mysql-deploy.herokuapp.com/api/getUsers").then(
-        (data) => {
-          var filteredUserList = [];
-          data.data.map((user) => {
-            if (user.user_Login !== cookies.user_login) {
-              filteredUserList.push(user);
-            }
-            return null;
-          });
-          setUserList(filteredUserList);
-        }
-      );
+      Axios.get("http://localhost:3002/api/getUsers").then((data) => {
+        var filteredUserList = [];
+        data.data.map((user) => {
+          if (user.user_Login !== cookies.user_login) {
+            filteredUserList.push(user);
+          }
+          return null;
+        });
+        setUserList(filteredUserList);
+      });
     }
     fetch();
   }, []);
@@ -52,7 +50,7 @@ const ChatWindow = (props) => {
                   >
                     <div
                       style={{
-                        backgroundImage: `url(https://mysql-deploy.herokuapp.com/images/${user.profilePic}`,
+                        backgroundImage: `url(http://localhost:3002/images/${user.profilePic}`,
                       }}
                       className="w-20 h-full duration-500 bg-center bg-cover rounded-l-md group-hover/item:w-10/12 bg-clip-padding"
                     />
