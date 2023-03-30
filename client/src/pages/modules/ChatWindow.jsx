@@ -9,6 +9,10 @@ const ChatWindow = (props) => {
   const [cookies, setCookies, removeCookie] = useCookies();
   const [userList, setUserList] = useState(["Brak użytkowników"]);
   const [chatShown, setChatShown] = useState("");
+  const [message, setMessage] = useState({
+    message: "penis",
+    time: Date.now(),
+  });
 
   useEffect(() => {
     async function fetch() {
@@ -29,7 +33,17 @@ const ChatWindow = (props) => {
   const showChat = (user_login) => {
     if (chatShown === "" || chatShown !== user_login) setChatShown(user_login);
     else setChatShown("");
-    console.log(chatShown);
+  };
+
+  const sendMessage = (userId2) => {
+    setMessage({
+      message: "penis",
+      time: Date.now(),
+    });
+    Axios.post(
+      `http://localhost:3002/sendMessage/${cookies.userId}=${userId2}`,
+      message
+    );
   };
 
   return (
@@ -41,12 +55,15 @@ const ChatWindow = (props) => {
       {userList.length > 1
         ? props.isShown
           ? userList.map((user) => {
+              console.log(user);
               return (
                 <>
                   <div
                     className="relative z-20 flex items-center h-16 m-2 duration-500 bg-white rounded-md cursor-pointer drop-shadow-lg group/item"
                     key={user.user_Login}
-                    onClick={() => showChat(user.user_Login)}
+                    onClick={() => {
+                      showChat(user.user_Login);
+                    }}
                   >
                     <div
                       style={{
@@ -66,10 +83,15 @@ const ChatWindow = (props) => {
                   >
                     <div className="absolute bottom-0 left-0 flex items-center w-full px-1 rounded-md bg-slate-800 h-1/9">
                       <input
+                        id={`${user.user_Login}_message_value`}
                         type="text"
                         className="w-full m-1 my-4 rounded shadow-inner h-5/6"
                       ></input>
-                      <button className="relative p-2 mx-auto bg-white rounded h-5/6">
+                      <button
+                        id={`${user.user_Login}_message_button`}
+                        className="relative p-2 mx-auto bg-white rounded h-5/6 "
+                        onClick={() => sendMessage(user.id_user)}
+                      >
                         <SendIcon />
                       </button>
                     </div>

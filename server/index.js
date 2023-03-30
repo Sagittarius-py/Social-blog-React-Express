@@ -6,6 +6,7 @@ const multer = require("multer");
 const mysql = require("mysql");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const fs = require("fs");
 
 const app = express();
 
@@ -243,12 +244,15 @@ app.get("/api/getUserNames/:user_Login", (req, res) => {
 });
 
 app.get("/api/getUsers/", (req, res) => {
-  db.query("SELECT user_Login, profilePic FROM users", (err, result) => {
-    if (err) {
-      console.log(err);
+  db.query(
+    "SELECT id_user, user_Login, profilePic FROM users",
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      res.send(result);
     }
-    res.send(result);
-  });
+  );
 });
 
 app.post("/api/writeComment/:id", (req, res) => {
@@ -291,6 +295,26 @@ app.delete("/api/deleteComment/:id", (req, res) => {
       console.log(err);
     }
   });
+});
+
+app.post("/sendMessage/:sender=:reciver", (req, res) => {
+  const sender = req.params.sender;
+  const reciver = req.params.reciver;
+  const message = req.body;
+  console.log(
+    `Senser: ${sender} sends message: ${message} to reciver: ${reciver}`
+  );
+  console.log(message);
+
+  db.query(
+    "SELECT * FROM chatting WHERE user_id_first = ? OR user_id_secc = ?;",
+    [sender, sender],
+    (err, result) => {
+      if (result) {
+        console.log(result[0]);
+      }
+    }
+  );
 });
 
 app.listen(PORT, () => {
