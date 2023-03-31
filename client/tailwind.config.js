@@ -3,6 +3,9 @@ module.exports = {
   darkMode: "class",
   content: ["./src/**/*.{js,jsx,ts,tsx}", "node_modules/preline/dist/*.js"],
   theme: {
+    minWidth: {
+      "1/2": "50%",
+    },
     extend: {
       spacing: {
         "1/9": "11.1111%",

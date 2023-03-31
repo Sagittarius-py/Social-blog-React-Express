@@ -4,15 +4,12 @@ import { useCookies } from "react-cookie";
 import Axios from "axios";
 import ArrowIcon from "../../svg/ArrowIcon";
 import SendIcon from "../../svg/SendIcon";
+import ChatMessageSection from "./ChatMessageSection";
 
 const ChatWindow = (props) => {
   const [cookies, setCookies, removeCookie] = useCookies();
   const [userList, setUserList] = useState(["Brak użytkowników"]);
   const [chatShown, setChatShown] = useState("");
-  const [message, setMessage] = useState({
-    message: "penis",
-    time: Date.now(),
-  });
 
   useEffect(() => {
     async function fetch() {
@@ -36,14 +33,22 @@ const ChatWindow = (props) => {
   };
 
   const sendMessage = (userId2) => {
-    setMessage({
-      message: "penis",
-      time: Date.now(),
-    });
-    Axios.post(
-      `http://localhost:3002/sendMessage/${cookies.userId}=${userId2}`,
-      message
-    );
+    let message = null;
+    let messageValue = document.getElementById(
+      `${userId2}_message_value`
+    ).value;
+
+    if (messageValue) {
+      message = {
+        message: messageValue,
+        time: Date.now(),
+      };
+
+      Axios.post(
+        `http://localhost:3002/sendMessage/${cookies.userId}=${userId2}`,
+        message
+      );
+    }
   };
 
   return (
@@ -55,12 +60,10 @@ const ChatWindow = (props) => {
       {userList.length > 1
         ? props.isShown
           ? userList.map((user) => {
-              console.log(user);
               return (
-                <>
+                <div key={user.user_Login}>
                   <div
                     className="relative z-20 flex items-center h-16 m-2 duration-500 bg-white rounded-md cursor-pointer drop-shadow-lg group/item"
-                    key={user.user_Login}
                     onClick={() => {
                       showChat(user.user_Login);
                     }}
@@ -81,9 +84,15 @@ const ChatWindow = (props) => {
                       chatShown === user.user_Login ? " h-96" : "invisible h-0"
                     } mx-2 bg-white z-0 duration-200 rounded-md`}
                   >
+                    {chatShown === user.user_Login ? (
+                      <ChatMessageSection
+                        id={`chat-with-${user.id_user}`}
+                        user={user.id_user}
+                      />
+                    ) : null}
                     <div className="absolute bottom-0 left-0 flex items-center w-full px-1 rounded-md bg-slate-800 h-1/9">
                       <input
-                        id={`${user.user_Login}_message_value`}
+                        id={`${user.id_user}_message_value`}
                         type="text"
                         className="w-full m-1 my-4 rounded shadow-inner h-5/6"
                       ></input>
@@ -96,7 +105,7 @@ const ChatWindow = (props) => {
                       </button>
                     </div>
                   </div>
-                </>
+                </div>
               );
             })
           : null

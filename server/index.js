@@ -300,22 +300,93 @@ app.delete("/api/deleteComment/:id", (req, res) => {
 app.post("/sendMessage/:sender=:reciver", (req, res) => {
   const sender = req.params.sender;
   const reciver = req.params.reciver;
-  const message = req.body;
-  console.log(
-    `Senser: ${sender} sends message: ${message} to reciver: ${reciver}`
-  );
-  console.log(message);
+  const messageText = req.body.message;
+  const messageTime = req.body.time;
+
+  const toWrite = `${sender} : ${messageText} : ${messageTime}`;
+
+  let smaller = 0;
+  let larger = 0;
+  sender < reciver
+    ? ((smaller = sender), (larger = reciver))
+    : ((smaller = reciver), (larger = sender));
 
   db.query(
-    "SELECT * FROM chatting WHERE user_id_first = ? OR user_id_secc = ?;",
-    [sender, sender],
+    "SELECT ID_Conversation FROM chatting WHERE user_id_first = ? AND user_id_secc = ?;",
+    [smaller, larger],
     (err, result) => {
-      if (result) {
-        console.log(result[0]);
+      if (result.length > 0) {
+        fs.appendFile(
+          `./conversation/${smaller}-${larger}`,
+          toWrite + "\r\n",
+          function (err) {
+            if (err) console.log(err);
+          }
+        );
+      } else {
+        db.query(
+          "INSERT INTO chatting ( user_id_first, user_id_secc) VALUES (?,?)",
+          [smaller, larger],
+          (err, res) => console.log(err)
+        );
+        fs.writeFile(
+          `./conversation/${smaller}-${larger}`,
+          toWrite + "\r\n",
+          function (err) {
+            if (err) console.log(err);
+          }
+        );
       }
     }
   );
+
+  res.send(window.NavigationPreloadManager.false());
 });
+
+app.get("/getMessages/:sender=:reciver", (req, res) => {
+  const sender = req.params.sender;
+  const reciver = req.params.reciver;
+  let smaller = 0;
+  let larger = 0;
+  sender < reciver
+    ? ((smaller = sender), (larger = reciver))
+    : ((smaller = reciver), (larger = sender));
+
+  let chatMessages = null;
+  db.query(
+    "SELECT ID_Conversation FROM chatting WHERE user_id_first = ? AND user_id_secc = ?;",
+    [smaller, larger],
+    (err, result) => {
+      if (result.length > 0) {
+        fs.readFile(
+          `./conversation/${smaller}-${larger}`,
+          "utf8",
+          (err, data) => {
+            if (err) {
+              console.error(err);
+              return;
+            }
+            data = processString(data);
+            res.send(data);
+          }
+        );
+      }
+    }
+  );
+  console.log(chatMessages);
+});
+
+function processString(string) {
+  let newLinesSplit = string.split("\r\n");
+  let data = [];
+  newLinesSplit.map((line) => {
+    let dataLine = line.split(" : ");
+    dataLine[0] = Number(dataLine[0]);
+    dataLine[2] = Number(dataLine[2]);
+    data.push(dataLine);
+  });
+  return data;
+}
 
 app.listen(PORT, () => {
   console.log(`Server is running on ${PORT}`);
