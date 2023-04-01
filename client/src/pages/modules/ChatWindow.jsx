@@ -10,6 +10,7 @@ const ChatWindow = (props) => {
   const [cookies, setCookies, removeCookie] = useCookies();
   const [userList, setUserList] = useState(["Brak użytkowników"]);
   const [chatShown, setChatShown] = useState("");
+  let [messageList, setMessageList] = useState();
 
   useEffect(() => {
     async function fetch() {
@@ -27,9 +28,23 @@ const ChatWindow = (props) => {
     fetch();
   }, []);
 
-  const showChat = (user_login) => {
-    if (chatShown === "" || chatShown !== user_login) setChatShown(user_login);
-    else setChatShown("");
+  const fetchMessages = (user, chtter) => {
+    Axios.get(`http://localhost:3002/getMessages/${user}=${chtter}`).then(
+      (data) => {
+        setMessageList(data.data);
+      }
+    );
+  };
+
+  const showChat = (user_login, id_user) => {
+    setMessageList([]);
+    if (chatShown === "" || chatShown !== user_login) {
+      fetchMessages(cookies.userId, id_user);
+      setChatShown(user_login);
+    } else {
+      setChatShown("");
+      setMessageList([]);
+    }
   };
 
   const sendMessage = (userId2) => {
@@ -47,7 +62,8 @@ const ChatWindow = (props) => {
       Axios.post(
         `http://localhost:3002/sendMessage/${cookies.userId}=${userId2}`,
         message
-      );
+      ).then(fetchMessages(cookies.userId, userId2));
+      document.getElementById(`${userId2}_message_value`).value = "";
     }
   };
 
@@ -65,7 +81,7 @@ const ChatWindow = (props) => {
                   <div
                     className="relative z-20 flex items-center h-16 m-2 duration-500 bg-white rounded-md cursor-pointer drop-shadow-lg group/item"
                     onClick={() => {
-                      showChat(user.user_Login);
+                      showChat(user.user_Login, user.id_user);
                     }}
                   >
                     <div
@@ -88,6 +104,7 @@ const ChatWindow = (props) => {
                       <ChatMessageSection
                         id={`chat-with-${user.id_user}`}
                         user={user.id_user}
+                        messageList={messageList}
                       />
                     ) : null}
                     <div className="absolute bottom-0 left-0 flex items-center w-full px-1 rounded-md bg-slate-800 h-1/9">

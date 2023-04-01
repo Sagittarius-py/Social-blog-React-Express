@@ -4,20 +4,7 @@ import { useCookies } from "react-cookie";
 
 const ChatMessageSection = (props) => {
   const [cookies, setCookies, removeCookie] = useCookies();
-  const currentUser = cookies.userId;
-  const chattingUser = props.user;
-
-  let [messageList, setMessageList] = useState();
-
-  useEffect(() => {
-    Axios.get(
-      `http://localhost:3002/getMessages/${currentUser}=${chattingUser}`
-    ).then((data) => {
-      setMessageList(data.data);
-    });
-  }, []);
-
-  console.log(messageList);
+  const messageList = props.messageList;
 
   return (
     <div className="relative flex flex-col overflow-x-hidden overflow-y-scroll h-8/9">
@@ -25,7 +12,7 @@ const ChatMessageSection = (props) => {
         ? messageList.map((message, key) => {
             if (message[0] === Number(cookies.userId) && message[0] > 0) {
               return (
-                <div className="flex flex-wrap justify-end">
+                <div key={key} className="flex flex-wrap justify-end">
                   <div
                     key={key}
                     className="p-1 px-4 mx-2 my-2 ml-16 bg-blue-500 rounded-md w-fit right"
@@ -40,11 +27,8 @@ const ChatMessageSection = (props) => {
               );
             } else if (message[0] > 0) {
               return (
-                <div className="">
-                  <div
-                    key={key}
-                    className="p-1 px-4 mx-2 my-2 mr-16 rounded-md bg-zinc-500 w-fit"
-                  >
+                <div key={key} className="">
+                  <div className="p-1 px-4 mx-2 my-2 mr-16 rounded-md bg-zinc-500 w-fit">
                     {message[1]}
                   </div>
 
@@ -54,6 +38,7 @@ const ChatMessageSection = (props) => {
                 </div>
               );
             }
+            return null;
           })
         : null}
     </div>

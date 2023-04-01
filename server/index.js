@@ -1,9 +1,8 @@
 const express = require("express");
 const db = require("./config/db");
+const session = require("express-session");
 const cors = require("cors");
-const path = require("path");
 const multer = require("multer");
-const mysql = require("mysql");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const fs = require("fs");
@@ -15,7 +14,7 @@ const PORT = process.env.PORT || 3002;
 app.use(
   cors({
     origin: "http://localhost:3000",
-    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+    optionsSuccessStatus: 200, 
   })
 );
 app.use(function (req, res, next) {
@@ -59,7 +58,6 @@ app.get("/api/get", (req, res) => {
       if (err) {
         console.log(err);
       }
-      console.log(err, result);
       res.send(result);
     }
   );
@@ -75,7 +73,6 @@ app.get("/api/getPostsByUser/:id", (req, res) => {
       if (err) {
         console.log(err);
       }
-      console.log(err, result);
       res.send(result);
     }
   );
@@ -104,11 +101,9 @@ app.post("/api/create", upload.array("files"), (req, res) => {
     "INSERT INTO posts (title, post_text, id_user) VALUES (?,?,?)",
     [title, text, userId],
     (err, result) => {
-      console.log(result);
       if (!req.files) {
         console.log("No file upload");
       } else if (req.files.length == 1) {
-        // console.log(result);
         db.query(
           "INSERT INTO photos(photoName, post_id)VALUES(?,?)",
           [req.files[0].filename, result.insertId],
@@ -119,7 +114,6 @@ app.post("/api/create", upload.array("files"), (req, res) => {
         );
       } else {
         req.files.map((file) => {
-          console.log(file.filename);
           var img_src = "http://127.0.0.1:3002/images/" + file.filename;
           db.query(
             "INSERT INTO photos(photoName, post_id)VALUES(?,?)",
@@ -138,7 +132,6 @@ app.post("/api/create", upload.array("files"), (req, res) => {
     "UPDATE users SET postCount = postCount + 1 WHERE id_user = ?",
     userId,
     (err, res) => {
-      console.log(err, res);
       if (err) {
         console.log(err);
       }
@@ -150,7 +143,6 @@ app.post("/api/create", upload.array("files"), (req, res) => {
 app.post("/api/like/:id", (req, res) => {
   const id = req.params.id;
   const userId = req.body.userId;
-  console.log(id);
   db.query(
     "UPDATE posts SET likes = likes + 1 WHERE post_id = ?",
     id,
@@ -158,7 +150,6 @@ app.post("/api/like/:id", (req, res) => {
       if (err) {
         console.log(err);
       }
-      console.log(res);
     }
   );
 
@@ -166,7 +157,6 @@ app.post("/api/like/:id", (req, res) => {
     "UPDATE users SET likesCount = likesCount + 1 WHERE id_user = ?",
     userId,
     (err, res) => {
-      console.log(err, res);
       if (err) {
         console.log(err);
       }
@@ -178,7 +168,6 @@ app.post("/api/like/:id", (req, res) => {
 
 app.delete("/api/delete/:id", (req, res) => {
   const id = req.params.id;
-  console.log(req.params);
   db.query("DELETE FROM posts WHERE post_id= ?", id, (err, result) => {
     if (err) {
       console.log(err);
@@ -214,7 +203,6 @@ app.post("/api/createUser", upload.array("files"), (req, res) => {
       if (err) {
         console.log(err);
       }
-      console.log(result);
     }
   );
 });
@@ -267,7 +255,6 @@ app.post("/api/writeComment/:id", (req, res) => {
       if (err) {
         console.log(err);
       }
-      console.log(result);
     }
   );
 });
@@ -280,7 +267,6 @@ app.get("/api/getComments/:id", (req, res) => {
     (err, result) => {
       if (err) {
         console.log(err);
-        console.log(result);
       }
       res.send(result);
     }
@@ -339,8 +325,6 @@ app.post("/sendMessage/:sender=:reciver", (req, res) => {
       }
     }
   );
-
-  res.send(window.NavigationPreloadManager.false());
 });
 
 app.get("/getMessages/:sender=:reciver", (req, res) => {

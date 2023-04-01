@@ -12,8 +12,6 @@ import AdminPanel from "./pages/AdminPanel";
 import ChatButton from "./pages/modules/ChatButton";
 import { useCookies } from "react-cookie";
 
-import { SessionProvider } from "./context";
-
 const App = () => {
   const [cookies, setCookie, removeCookie] = useCookies();
 
@@ -28,24 +26,22 @@ const App = () => {
   }
 
   return (
-    <div className="bg-white dark:bg-neutral-800 pt-8 min-h-screen">
-      <SessionProvider>
-        <NavBar />
-        <Router>
-          <Route path="/" exact render={(props) => <MainPage />} />
-          <Route path="/createpost" render={(props) => <CreatePost />} />
-          <Route path="/login" render={(props) => <Login />} />
-          <Route path="/register" render={(props) => <Signup />} />
-          <Route path="/post/:postId" render={(props) => <Post />} />
-          <Route path="/profile/:id_user" render={(props) => <Profile />} />
-          {cookies.accessLvl > 1 ? (
-            <Route path="/adminPanel" render={(props) => <AdminPanel />} />
-          ) : (
-            <Route path="/adminPanel" render={(props) => <MainPage />} />
-          )}
-        </Router>
-        <ChatButton />
-      </SessionProvider>
+    <div className="min-h-screen pt-8 bg-white dark:bg-neutral-800">
+      <NavBar />
+      <Router>
+        <Route path="/" exact render={(props) => <MainPage />} />
+        <Route path="/createpost" render={(props) => <CreatePost />} />
+        <Route path="/login" render={(props) => <Login />} />
+        <Route path="/register" render={(props) => <Signup />} />
+        <Route path="/post/:postId" render={(props) => <Post />} />
+        <Route path="/profile/:id_user" render={(props) => <Profile />} />
+        {cookies.accessLvl > 1 ? (
+          <Route path="/adminPanel" render={(props) => <AdminPanel />} />
+        ) : (
+          <Route path="/adminPanel" render={(props) => <MainPage />} />
+        )}
+      </Router>
+      <ChatButton />
     </div>
   );
 };
