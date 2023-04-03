@@ -17,7 +17,7 @@ const ChatWindow = (props) => {
       Axios.get("http://localhost:3002/api/getUsers").then((data) => {
         var filteredUserList = [];
         data.data.map((user) => {
-          if (user.user_Login !== cookies.user_login) {
+          if (user.id_user != cookies.userId) {
             filteredUserList.push(user);
           }
           return null;

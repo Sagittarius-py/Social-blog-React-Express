@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 3002;
 app.use(
   cors({
     origin: "http://localhost:3000",
-    optionsSuccessStatus: 200, 
+    optionsSuccessStatus: 200,
   })
 );
 app.use(function (req, res, next) {
@@ -188,7 +188,7 @@ app.post("/api/createUser", upload.array("files"), (req, res) => {
   const profilePic = req.files[0].filename;
   const backgroundPic = req.files[1].filename;
   db.query(
-    "INSERT INTO users (user_login,user_name, user_surname, password, access_lvl, about, profilePic, backgroundPic) VALUES (?,?,?,?,?,?,?,?)",
+    "INSERT INTO users (user_login, user_name, user_surname, password, access_lvl, about, profilePic, backgroundPic) VALUES (?,?,?,?,?,?,?,?)",
     [
       user_login,
       user_name,
@@ -301,7 +301,7 @@ app.post("/sendMessage/:sender=:reciver", (req, res) => {
     "SELECT ID_Conversation FROM chatting WHERE user_id_first = ? AND user_id_secc = ?;",
     [smaller, larger],
     (err, result) => {
-      if (result.length > 0) {
+      if (result.length) {
         fs.appendFile(
           `./conversation/${smaller}-${larger}`,
           toWrite + "\r\n",
@@ -315,7 +315,7 @@ app.post("/sendMessage/:sender=:reciver", (req, res) => {
           [smaller, larger],
           (err, res) => console.log(err)
         );
-        fs.writeFile(
+        fs.appendFile(
           `./conversation/${smaller}-${larger}`,
           toWrite + "\r\n",
           function (err) {
@@ -341,7 +341,7 @@ app.get("/getMessages/:sender=:reciver", (req, res) => {
     "SELECT ID_Conversation FROM chatting WHERE user_id_first = ? AND user_id_secc = ?;",
     [smaller, larger],
     (err, result) => {
-      if (result.length > 0) {
+      if (result) {
         fs.readFile(
           `./conversation/${smaller}-${larger}`,
           "utf8",
